@@ -16,7 +16,22 @@ namespace Sandpiles
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            /// My CODE BELOW
+            /// 
+            try
+            {
+                ZeroFinder zeroFinder = new ZeroFinder();
+                Form1 form1 = new Form1(zeroFinder.zeroSand);
+                Application.Run(form1);
+            }
+            catch
+            {
+                Console.Error.WriteLine("Identity not found");
+            }
+            
         }
+
+        
     }
 }
