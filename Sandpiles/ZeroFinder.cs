@@ -13,40 +13,55 @@ namespace Sandpiles
 
         public Sandpile zeroSand { get; private set; }
 
-        public ZeroFinder()
+        public ZeroFinder(int size, int no_range)
         {
-            this.size = 3;
-            this.no_range = 4;
+            this.size = size;
+            this.no_range = no_range;
 
             createSandpiles();
 
         }
 
+        int [,] fullFillSandPile(int s)
+        {
+            int[,] grains = new int[this.size, this.size];
+
+            for (int i = 0; i < this.size; i++)
+            {
+                for (int j = 0; j < this.size; j++)
+                {
+                    grains[i, j] = s;
+                }
+            }
+
+            return grains;
+        }
+
         void createSandpiles()
         {
-            Sandpile sandFull = new Sandpile(new int[,] { { 3, 3, 3 }, { 3, 3, 3 }, { 3, 3, 3 } });
+            Sandpile sandFull = new Sandpile(fullFillSandPile(this.no_range-1), this.size, this.no_range);
 
-            int noOfiterations = (int)Math.Pow(this.no_range, this.size * this.size);
+            long noOfiterations = (long)Math.Pow(this.no_range, this.size * this.size);
             for (int i=0; i<noOfiterations; i++)
             {
                 int[,] grains2 = new int[this.size,this.size];
 
-                grains2[0, 0] = (int)(i / Math.Pow(this.no_range, 8)) % this.no_range;
-                grains2[0, 1] = (int)(i / Math.Pow(this.no_range, 7)) % this.no_range;
-                grains2[0, 2] = (int)(i / Math.Pow(this.no_range, 6)) % this.no_range;
-                grains2[1, 0] = (int)(i / Math.Pow(this.no_range, 5)) % this.no_range;
-                grains2[1, 1] = (int)(i / Math.Pow(this.no_range, 4)) % this.no_range;
-                grains2[1, 2] = (int)(i / Math.Pow(this.no_range, 3)) % this.no_range;
-                grains2[2, 0] = (int)(i / Math.Pow(this.no_range, 2)) % this.no_range;
-                grains2[2, 1] = (int)(i / Math.Pow(this.no_range, 1)) % this.no_range;
-                grains2[2, 2] = (int)(i / Math.Pow(this.no_range, 0)) % this.no_range;
+                for (int j = 0; j < this.size; j++)
+                {
+                    for (int k = 0; k < this.size; k++)
+                    {
+                        grains2[j, k] = (int)(i / Math.Pow(this.no_range, j * this.size + k)) % this.no_range;
+                    }
+                }
+ 
 
-                Sandpile sand2 = new Sandpile(grains2);
+                Sandpile sand2 = new Sandpile(grains2, this.size, this.no_range);
                 Sandpile sand_toTest = sandFull.addTo(sand2);
                 
                 if (sand_toTest.equals(sand_toTest.addTo(sand_toTest))) 
                 {
                     this.zeroSand = sand_toTest;
+                    this.zeroSand.print();
                     return;
                 }
 

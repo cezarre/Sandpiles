@@ -9,35 +9,38 @@ namespace Sandpiles
     public class Sandpile
     {
         public int[,] grains { get; private set; }
+        int no_range;
+        int size;
 
-
-        public Sandpile(int [,] grains)
+        public Sandpile(int [,] grains, int size, int no_range)
         {
-            this.grains = new int[3, 3];
-            Array.Copy(topple(grains), this.grains, grains.Length);
-                        
+            this.no_range = no_range;
+            this.size = size;
+
+            this.grains = new int[this.size, this.size];
+            Array.Copy(topple(grains), this.grains, grains.Length);          
         }
 
         int[,] topple(int[,] gaps)
         {
-            int[,] g = new int[3, 3];
+            int[,] g = new int[this.size, this.size];
             Array.Copy(gaps, g, g.Length);
 
             bool isToppled = false;
             while (!isToppled)
             {
                 isToppled = true;
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < this.size; i++)
                 {
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < this.size; j++)
                     {
-                        if (g[i, j] > 3)
+                        if (g[i, j] >= this.no_range)
                         {
                             if (i > 0)
                             {
                                 g[i - 1, j]++;
                             }
-                            if (i < 2)
+                            if (i < this.size - 1)
                             {
                                 g[i + 1, j]++;
                             }
@@ -45,11 +48,11 @@ namespace Sandpiles
                             {
                                 g[i, j - 1]++;
                             }
-                            if (j < 2)
+                            if (j < this.size - 1)
                             {
                                 g[i, j + 1]++;
                             }
-                            g[i, j] -= 4;
+                            g[i, j] -= this.no_range;
 
                             isToppled = false;
                         }
@@ -64,22 +67,22 @@ namespace Sandpiles
         public Sandpile addTo(Sandpile sand2)
         {
             int[,] grid2 = sand2.grains;
-            int[,] finalGrid = new int[3, 3];
-            for (int i = 0; i < 3; i++)
+            int[,] finalGrid = new int[this.size, this.size];
+            for (int i = 0; i < this.size; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < this.size; j++)
                 {
                     finalGrid[i, j] = this.grains[i, j] + grid2[i, j];
                 }
             }
-            return new Sandpile(finalGrid);
+            return new Sandpile(finalGrid, this.size, this.no_range);
         }
 
         public bool equals(Sandpile sand2)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < this.size; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < this.size; j++)
                 {
                     if (sand2.grains[i, j] != this.grains[i, j])
                     {
@@ -92,9 +95,15 @@ namespace Sandpiles
 
         public void print ()
         {
-            Console.WriteLine("{0}-{1}-{2}", this.grains[0, 0], this.grains[0, 1], this.grains[0, 2]);
-            Console.WriteLine("{0}-{1}-{2}", this.grains[1, 0], this.grains[1, 1], this.grains[1, 2]);
-            Console.WriteLine("{0}-{1}-{2}", this.grains[2, 0], this.grains[2, 1], this.grains[2, 2]);
+            for (int i=0; i<this.size; i++)
+            {
+                for (int j=0; j<this.size; j++)
+                {
+                    Console.Write("{0} ", this.grains[i, j]);
+                }
+                Console.WriteLine();
+            }
+           
         }
     }
 }

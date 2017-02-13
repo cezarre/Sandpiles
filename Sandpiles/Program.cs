@@ -21,9 +21,9 @@ namespace Sandpiles
             /// 
             try
             {
-                ZeroFinder zeroFinder = new ZeroFinder();
-                Form1 form1 = new Form1(zeroFinder.zeroSand);
-                Application.Run(form1);
+                ZeroFinder zeroFinder = new ZeroFinder(3,4);
+                //Form1 form1 = new Form1(zeroFinder.zeroSand);
+                //Application.Run(form1);
             }
             catch
             {
